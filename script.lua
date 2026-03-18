@@ -1,33 +1,35 @@
 --[[
-    Delta Script AI - Sambung Kata ULTIMATE
-    Fitur: Full Stats Dashboard, Local Database, Human Typing, Trap System.
+    Delta Script AI - Sambung Kata REAL ENGINE
+    Status: Active & Tested
+    Logic: UI Text Monitoring + Virtual Input Injection
 ]]
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
 -- ==========================================
--- DATABASE KATA (Paste Kata Anda di Sini)
+-- DATABASE KATA (PASTE LEBIH BANYAK DI SINI)
 -- ==========================================
 local myWords = {
-    "absis", "adneks", "adops", "afiks", "ajeks", "akseptif", "akuntatif", "alfabet", "alomorf", "alotrof", "amfibi", "amfiks", "amorf", "amp", "amuba", "anabasis", "anakronistis", "analog", "anarkis", "anasir", "andil", "andragogi", "androgini", "aneks", "ansambel", "antarklub", "antitesis", "antraks", "antropomorf", "apatis", "apeks", "apendiks", "apograf", "apokrif", "apolitis", "aporetis", "asertif", "asfiks", "asketis", "asinkron", "asistens", "asosiati", "asonansi", "astigmatis", "asimtoti", "asimtut", "ataktis", "ateis", "atenuasi", "atomis", "autokarp", "autokton", "autolisis", "autonom", "autoradiograf", "autotipe", "avontur", "awat", "awet", "azimat", "azis", "biseps", "camp", "deks", "dektos", "dolf", "dops", "draf", "drel", "drop", "drumben", "duet", "dups", "edisi", "efek", "efendi", "eka", "ekh", "eks", "eksak", "eksis", "eksit", "eksons", "ekspos", "ekstrem", "ekte", "elips", "empat", "emulsi", "enans", "engkap", "englap", "engsap", "entit", "eps", "esais", "esens", "estetis", "etis", "etos", "eufemis", "eufoniatis", "eufotis", "evakuatif", "evolutif", "faktual", "fakultatif", "fasik", "fisis", "fleks", "fluks", "fokal", "foks", "fokus", "fons", "forsep", "fungsional", "gips", "golf", "hams", "harkat", "hipotesis", "horisontalis", "hov", "humus", "iatris", "identik", "idiopatis", "impuls", "indeks", "indus", "iners", "infiks", "informatif", "inisiatif", "inisif", "inklusif", "insting", "instingtif", "instruktif", "intens", "interupsi", "intrinsik", "introspeksi", "intuitif", "isobarik", "isomorf", "isomorfis", "isotop", "jaz", "jengat", "jengit", "jips", "jipsi", "jukstapos", "kafi", "kaget", "kais", "kals", "kamp", "kampf", "kanti", "kantif", "kap", "karaf", "karak", "karap", "karas", "kars", "karsis", "kart", "kartu", "kas", "kasif", "kaset", "katarsis", "kategorial", "kates", "katut", "kelap", "keles", "kelip", "kelit", "kelot", "kelut", "kemp", "kempot", "kempu", "kempul", "kens", "kep", "keping", "kepit", "kepul", "kepung", "kerah", "kerak", "kerakal", "keramas", "keramat", "keramba", "kerambit", "keramik", "keran", "keranda", "kerang", "keranjang", "kerap", "keras", "keratan", "keraton", "kerbau", "kerdil", "kerdipan", "kerek", "keren", "kereta", "kerik", "kerikil", "kerinduan", "kering", "keris", "keritik", "kerja", "kerling", "kerna", "keroncong", "kertas", "kerubung", "kerumun", "kerupuk", "kerut", "kesah", "kesan", "kesat", "keseleo", "keset", "kesia", "kesit", "kesitu", "kesohor", "ketam", "ketan", "ketat", "ketawa", "ketiak", "ketiban", "ketika", "ketiwak", "ketoprak", "ketujuh", "ketuk", "ketumbar", "ketupat", "khawatir", "khat", "khatulistiwa", "khayal", "khazanah", "khianat", "khidmmat", "khitan", "khotbah", "khusus", "kiamat", "kian", "kiani", "kias", "kibar", "kibas", "kiblat", "kidal", "kidung", "kikir", "kikis", "kilan", "kilas", "kilat", "kilau", "kili", "kilir", "kilo", "kimah", "kimia", "kimlo", "kimo", "kimpul", "kina", "kincir", "kiner", "kinerja", "kini", "kinyis", "kipas", "kira", "kirab", "kirai", "kiranya", "kirim", "kiring", "kirmizi", "kirs", "kisa", "kisah", "kisar", "kisi", "kisruh", "kista", "kisut", "kita", "kitab", "kitar", "klan", "klasifikasi", "klasik", "klausul", "klik", "klien", "klimaks", "klinik", "kliping", "klise", "kloning", "klorin", "klub", "knalpot", "koala", "koalisi", "koboi", "kocak", "kocok", "kode", "kodrat", "koefisien", "kohesi", "koin", "kokoh", "koki", "kolam", "kolera", "koleksi", "kolektif", "kolesterol", "kolong", "kolom", "koloni", "kolosal", "koma", "komandan", "komedi", "komentar", "komersial", "komidi", "komik", "komisi", "komitmen", "komoditas", "komon", "kompak", "kompas", "kompeni", "kompensasi", "kompetisi", "kompi", "komplain", "komplotan", "komponen", "komposisi", "kompres", "kompromi", "komputer", "komunis", "kondisi", "konduktor", "koneksi", "konferensi", "konflik", "kongkong", "kongres", "konjungsi", "konkrit", "konon", "konperensi", "konsep", "konser", "konservasi", "konsisten", "konsol", "konspirasi", "konstan", "konstruksi", "konsultasi", "konsumsi", "kontak", "kontaminasi", "konteks", "kontemporer", "kontes", "kontingen", "kontinu", "kontrak", "kontraksi", "kontras", "kontribusi", "kontrol", "konveksi", "konvensi", "konvoi", "koper", "koperasi", "kopi", "kopiah", "koplak", "kopling", "kopral", "koprok", "koral", "koran", "korban", "korden", "korek", "koreksi", "koreng", "kores", "koresponden", "koridor", "kornea", "kornet", "korosi", "korps", "korsleting", "korupsi", "kosa", "kosakat", "kosambi", "kosan", "kosek", "kosmetik", "kosmik", "kosmonot", "kosong", "kostum", "kota", "kotak", "kotbah", "kotor", "kowad", "kowalk", "koyak", "kran", "krayon", "kreasi", "kreatif", "kredit", "krem", "kremasi", "kresek", "kribo", "kriminil", "kris", "krisis", "kristal", "kriteria", "kritik", "kromo", "kronis", "ksatria", "kuaci", "kuadran", "kuadrat", "kuah", "kuala", "kuali", "kualitas", "kuantitas", "kuas", "kuasa", "kuat", "kuatir", "kubah", "kubang", "kubik", "kubis", "kubu", "kubur", "kucai", "kucel", "kucing", "kucir", "kucur", "kuda", "kudapan", "kudi", "kudis", "kudrat", "kudus", "kue", "kuetiau", "kufu", "kuil", "kuintal", "kuintet", "kuis", "kuitansi", "kuku", "kukuh", "kukus", "kulai", "kulat", "kuli", "kuliah", "kuliner", "kulit", "kulkas", "kulminasi", "kulo", "kulon", "kulot", "kultural", "kultur", "kuman", "kumandang", "kumbang", "kumis", "kumpul", "kumuh", "kumur", "kunang", "kuncen", "kunci", "kuncup", "kunda", "kuning", "kunjung", "kunno", "kuntum", "kunyah", "kunyit", "kuota", "kuper", "kupas", "kupat", "kuping", "kupon", "kupu", "kura", "kurang", "kuras", "kurator", "kurawal", "kurban", "kurcaci", "kuria", "kurikulum", "kurir", "kurma", "kurnia", "kurs", "kursi", "kursus", "kurun", "kurung", "kurus", "kusa", "kusam", "kusta", "kusu", "kusut", "kutang", "kutu", "kutub", "kutukan", "kutut", "kuwera", "kwarcit", "kwartal", "kwartir", "laba", "labah", "labang", "labas", "label", "laberang", "labi", "labil", "labirin", "labrak", "labu", "labuh", "lacak", "laci", "lacur", "lada", "ladang", "laden", "lading", "ladung", "lafal", "laga", "lagam", "lagi", "lagu", "lahad", "lahap", "laar", "lahir", "laik", "lais", "laju", "lajur", "laki", "laknat", "lakon", "laksa", "laksana", "laku", "lala", "lalai", "lalak", "lalat", "lalau", "laler", "lali", "lalu", "lama", "lambang", "lambat", "lambe", "lambung", "lamun", "lamur", "lana", "lanang", "lanau", "lancar", "lancung", "lancur", "landa", "landai", "landak", "landas", "langganan", "langgar", "langgeng", "langi", "langit", "langka", "langkah", "langkan", "langkas", "langkat", "langking", "langkung", "langlang", "langsa", "langsar", "langsat", "langsi", "langsung", "lanjut", "lanjur", "lansia", "lansi", "lantai", "lantas", "lentera", "lentur", "lanyau", "laos", "lapang", "lapar", "lapat", "lapel", "lapis", "lapor", "lapuk", "lara", "larai", "larak", "larang", "laras", "larat", "lari", "larik", "laris", "laron", "larut", "lasuh", "lata", "latah", "latak", "latar", "latih", "latin", "latung", "latur", "lauk", "laun", "laung", "laut", "lawa", "lawak", "lawan", "lawang", "lawar", "lawas", "lawat", "layak", "layam", "layan", "layang", "layap", "layar", "layas", "layat", "layu", "layur", "lazat", "lazim", "lebah", "lebai", "lebak", "lebam", "lebar", "lebas", "lebat", "leber", "lebih", "lebuh", "lebung", "lebur", "leca", "leceh", "lecek", "lecet", "lecit", "lecur", "lecut", "ledak", "ledang", "ledek", "ledeng", "leder", "ledos", "leduk", "lega", "legak", "legal", "legam", "legap", "legar", "legas", "legat", "legenda", "leger", "legit", "lego", "legong", "legu", "legum", "legung", "lehar", "leher", "leka", "lekah", "lekam", "lekan", "lekap", "lekar", "lekas", "lekat", "lekeh", "lelap", "lelar", "lelas", "lelat", "leleh", "lelep", "leler", "leles", "leluasa", "lelucon", "leluhur", "lulur", "lulus", "lumat", "lumba", "lumbung", "lumpuh", "lumpur", "lumrah", "lumu", "lumur", "lumut", "lunak", "lunas", "luncas", "luncur", "lundun", "lunglai", "lungsin", "lunjur", "luntur", "lupa", "luput", "lurah", "lurik", "luruh", "lurus", "lusa", "lusin", "lusu", "lutut", "luwes", "maafi", "maaf", "mabuk", "macan", "macat", "mace", "macet", "madah", "madani", "madat", "madrasah", "madu", "mafhum", "maut", "mawar", "maya", "mayam", "mayang", "mayat", "mayor", "maysa", "maza", "mazhab", "mebel", "medan", "media", "mediator", "medis", "meditasi", "mega", "megah", "megang", "megar", "meja", "mekar", "mekanisme", "melankolis", "melati", "melayu", "melek", "melesit", "melodi", "melongo", "melulu", "memang", "memar", "memento", "memo", "menang", "menangis", "menantu", "mencak", "mending", "meneng", "mengerti", "mentah", "mentari", "mentega", "menteri", "mentok", "mentol", "menu", "manusia", "menyapa", "merah", "merana", "meranti", "merdeka", "merdu", "mereka", "meriah", "miring", "mirip", "miris", "mirtul", "misa", "misal", "miskin", "mistar", "misteri", "mistis", "mitra", "miyang", "mobil", "modis", "moga", "mogok", "mohon", "molek", "momen", "momentum", "monitor", "monolog", "monopoli", "mosi", "motivasi", "mual", "muara", "muat", "muazin", "muda", "mudah", "mudik", "mufa", "mufakat", "mufti", "muhibah", "muhrim", "muis", "muja", "mujarab", "mujur", "muka", "mukim", "mukjizat", "mukmin", "mula", "mulai", "mulia", "mulsa", "mulut", "mumbul", "mumpuni", "muncul", "munding", "mundur", "mungil", "mungkin", "mungkur", "mungkut", "mungsi", "munisi", "munjul", "munajat", "munjunjung", "munsyi", "muntah", "muntil", "munu", "mupakat", "murah", "muram", "murba", "murbai", "murid", "muring", "murni", "murka", "murtad", "murung", "musa", "musabab", "musafir", "musang", "musyawarah", "moseum", "musik", "musim", "muslihat", "musna", "musnah", "mustahil", "musuh", "mutasi", "mutiara", "mutlak", "mutu", "nabi", "nada", "nadi", "nafas", "nafkah", "nafsi", "nafsu", "naga", "nahas", "nahu", "naik", "najis", "nakal", "nakhoda", "nalar", "nama", "nampak", "nampan", "namun", "nanah", "nanap", "nanar", "nenas", "nangka", "nanti", "napas", "napu", "nara", "narasi", "naratif", "narkoba", "nasab", "nasehat", "nasi", "nasib", "nasihat", "nasional", "naskah", "nasrani", "natal", "natrium", "naung", "nurani", "nusa", "nusantara", "nutrisi", "nuansa", "nyala", "nyaman", "nyamuk", "nyanyi", "nyaring", "nyata", "nyawa", "nyenyak", "nyonya", "obal", "obar", "obat", "obeng", "objek", "objektif", "obligasi", "oblong", "obor", "obrak", "obral", "obrol", "obsesi", "observasi", "obsidian", "oknum", "oktaf", "okuler", "oles", "olahraga", "oleh", "olok", "ombak", "omel", "omong", "ompong", "onak", "onar", "onderdil", "ongkos", "onta", "operasi", "opname", "optimis", "opsi", "optik", "orang", "orasi", "orbit", "order", "organisasi", "orisinal", "ornamen", "ospek", "otak", "otentik", "otobiografi", "otot", "oval", "oven", "oyak", "ozon", "pabean", "pabel", "pabrik", "pacar", "pacu", "padam", "padan", "padang", "padas", "padat", "paderi", "padu", "paduan", "pagar", "pagi", "pagu", "pagut", "paha", "pahala", "paham", "pahas", "pahat", "pahit", "pahlawan", "pailit", "pajak", "pajang", "pajar", "pajuh", "pakai", "pakal", "pakan", "pakar", "pakat", "pakis", "paksa", "pakta", "paku", "paladin", "palai", "palang", "palapa", "palas", "palat", "palau", "palem", "palen", "pales", "palet", "paling", "palis", "palit", "palu", "palun", "palung", "paman", "pamah", "pamer", "pamit", "pamong", "pamor", "pampas", "pampat", "pampa", "pamur", "panah", "panas", "panau", "panca", "pancar", "pancing", "pancit", "pancur", "pancut", "pandai", "pandak", "pandan", "pandang", "pandu", "panel", "pangah", "pangan", "pangeran", "pangestu", "panggul", "panggung", "panggil", "pangkai", "pangkas", "pangkat", "pangkal", "pangkon", "pangku", "panglima", "panglong", "pangonan", "pangsa", "pangsi", "pangur", "panitia", "panitera", "panjang", "panjar", "panjat", "panji", "panjul", "pantai", "pantang", "pantas", "pantat", "pantau", "pantek", "panti", "pantik", "pantis", "pantul", "pantun", "panu", "panus", "papa", "papah", "papak", "papan", "papar", "papas", "papat", "parah", "parafe", "parafin", "paragraf", "parak", "param", "parang", "parap", "paras", "parat", "parau", "parit", "parkir", "parlemen", "parodi", "paroki", "paron", "paruh", "parut", "pasah", "pasak", "pasal", "pasang", "pasar", "pasas", "pasat", "paser", "paset", "pasfoto", "pasif", "pasir", "pasit", "pasma", "pasrah", "pasta", "pasti", "pasu", "pasuh", "pasung", "patah", "patam", "patar", "patek", "paten", "patera", "patih", "patik", "patil", "patin", "patir", "patit", "patok", "patroli", "patron", "patuh", "patuk", "patul", "patung", "patut", "pauh", "pauk", "paus", "paut", "paviliun", "pawai", "pawang", "paya", "payah", "payang", "payar", "payat", "payau", "payir", "payu", "payung", "peberi", "pecah", "pecai", "pecak", "pecal", "pecara", "pecat", "pecel", "pecinan", "pecut", "pedagang", "pedah", "pedaka", "pedal", "pedalaman", "pedanda", "pedang", "pedar", "pedas", "pedati", "pedel", "pedewak", "pedih", "pedis", "pedok", "pedu", "peduli", "pegagan", "pegal", "pegan", "pegang", "pegangan", "pegar", "pegas", "pegawai", "pegun", "pehong", "peka", "pekak", "pekan", "pekap", "pekas", "pekat", "peker", "peki", "peking", "pekir", "pekis", "pekur", "pelabi", "pelah", "pelamin", "pelampung", "pelana", "pelancong", "pelangi", "pelanting", "pelapis", "pelapor", "pelat", "pelatuk", "pelaut", "pelayon", "pelbagai", "pelebaya", "pelepah", "pelesir", "pelesit", "pelet", "peletik", "peleting", "pelias", "pelihara", "pelik", "peling", "pelintir", "pelipis", "pelipit", "pelipur", "pelir", "pelit", "pelita", "pelitur", "pelonco", "pelosok", "pelopor", "pelor", "pelos", "peluh", "peluit", "peluk", "peluntur", "peluru", "pemajang", "pemalak", "pemali", "pemantul", "pemar", "pemat", "pembantu", "pembedah", "pemeo", "pemer", "pemicu", "pemidana", "pemidang", "pemikat", "pemilu", "pemirsa", "pemuda", "pemudi", "penat", "pencak", "pencar", "pencet", "pencil", "pencut", "penda", "pendam", "pendek", "pendapa", "pende", "pending", "pendopo", "penembak", "penganten", "pengaruh", "penggal", "penghulu", "pening", "peniti", "penjara", "penjuru", "pensil", "pensiun", "pental", "pentas", "pentil", "penting", "pentol", "pentung", "penuh", "pepah", "pepak", "pepas", "pepatah", "pepaya", "pepedan", "pepek", "pepes", "pepet", "perah", "perahu", "perai", "perajurit", "perak", "peran", "perancah", "perancis", "perang", "peranti", "peras", "perat", "perawan", "perba", "percaya", "percik", "percul", "percuma", "perdana", "perdata", "perdu", "peredam", "perembu", "perempuan", "peres", "peretel", "pergala", "pergam", "pergi", "pergok", "perhal", "perhati", "peria", "peribahasa", "peribadi", "perigi", "periksa", "perinci", "perindu", "peringat", "perintah", "periode", "perisai", "peristiwa", "periuk", "perkakas", "perkara", "perkasa", "perkedel", "perkemahan", "perkutut", "perlahan", "perlambang", "perlente", "perlus", "permai", "permaisuri", "permanen", "permata", "permadi", "permen", "permisi", "permukiman", "pernah", "peroi", "peron", "pelos", "perosok", "perot", "persada", "persahabatan", "persen", "persep", "persepuluh", "persepsi", "persero", "persetujuan", "persis", "person", "pertama", "pertiwi", "perum", "perwara", "perwira", "pesak", "pesaka", "pesanggrahan", "pesat", "pesawat", "pesiar", "pesimis", "pesinis", "pesisir", "pesona", "pesta", "pesut", "petah", "petai", "petak", "petaka", "petal", "petam", "petang", "petar", "petas", "petatas", "petek", "petenteng", "peter", "petera", "petik", "petilan", "petir", "petis", "petisi", "petola", "petuah", "petunjuk", "piagam", "piala", "piama", "piang", "piano", "piara", "piatu", "picah", "picik", "picis", "picit", "picu", "pidana", "pidato", "pihak", "pijak", "pijar", "pijat", "pikat", "pikir", "pikul", "pikun", "pilar", "pilat", "pilek", "pilih", "pilin", "pilis", "pilon", "pilot", "pimpin", "pinak", "pinang", "pinar", "pincang", "pincuk", "pindah", "pindai", "pindang", "pinding", "pindu", "pinis", "pinisi", "pinjam", "pinset", "pinta", "pintal", "pintar", "pintas", "pintil", "pintu", "pion", "pipet", "pipis", "pipit", "pirai", "piramida", "pirang", "piranti", "pirasat", "piring", "pirsa", "pirus", "pisah", "pisang", "pisau", "pisik", "pispot", "pista", "pistol", "pitar", "piting", "piutang", "pleidoi", "pleno", "plester", "plonco", "pocok", "pocong", "podium", "pohon", "pojok", "pokok", "polan", "polang", "polas", "polda", "polemik", "polen", "poler", "poles", "polet", "poliklinik", "polimer", "polis", "polisi", "politik", "polon", "polong", "polos", "polusi", "polutan", "pompa", "pondok", "pondong", "pongah", "ponis", "ponok", "ponsel", "pontang", "ponton", "ponya", "popi", "populer", "popok", "popor", "porak", "poranda", "porno", "poros", "porsi", "portal", "porter", "porselen", "posisi", "positif", "posko", "posmen", "poster", "postur", "potas", "potensi", "potong", "potret", "poyang", "prabakti", "prabot", "prabu", "prada", "pradana", "pradesa", "praduga", "prahara", "prahoto", "prajurit", "prakarsa", "prakarya", "prakata", "prakiraan", "praktek", "praktis", "pramusaji", "pramuwisata", "prangko", "prasarana", "prasasti", "prasejarah", "prasmanan", "prasangka", "prasetya", "prastawa", "prawira", "pribadi", "pribumi", "prihatin", "primadona", "primer", "prinsip", "prioritas", "prisma", "privasi", "privat", "produk", "profesor", "profil", "program", "progresif", "proklamasi", "promosi", "proporsi", "proposal", "prosedur", "proses", "profesi", "proteksi", "protokol", "proyek", "proyeksi", "puasa", "publik", "pucat", "pucuk", "pudak", "pudar", "puding", "pugar", "pugas", "puguh", "puja", "puji", "pujut", "pukat", "pukau", "pukul", "pulang", "pulan", "pulas", "pulau", "pules", "pulih", "pulpen", "pulsa", "puluh", "pulung", "pulut", "punah", "punakawan", "punat", "punca", "puncak", "pundak", "pundi", "pundit", "pundung", "punggah", "punggawa", "punggung", "pungkas", "pungkur", "pungli", "pungut", "punia", "punya", "pupuk", "pupur", "pupus", "puput", "purba", "purbakala", "purit", "purnama", "purut", "pusat", "puser", "pusing", "puspa", "pusaka", "pusara", "pustaka", "pusta", "putis", "putra", "putri", "putus", "puyeng", "puyuh", "qari", "qariah", "qasar", "qasidah", "qiamulail", "qiraah", "quran", "rabaa", "rabak", "raban", "rabat", "rabit", "rabuk", "rabun", "rabung", "racak", "racau", "racik", "racun", "radak", "radam", "radan", "radar", "raden", "radikal", "radio", "radius", "rafaksi", "ragam", "ragas", "raghu", "ragum", "ragung", "ragut", "rahang", "rahap", "rahasia", "rahat", "rahayu", "rahib", "rahim", "rahman", "rahmat", "rahsia", "rajah", "rajam", "rajan", "rajawali", "rajin", "rajok", "rajut", "rakaat", "rakam", "rakan", "rakap", "rakat", "raket", "rakit", "raksa", "raksasa", "rakun", "rakus", "rakyat", "ralat", "ramah", "ramai", "ramal", "ramas", "rambah", "rambai", "rambak", "ramban", "rambat", "rambu", "rambut", "ramin", "rampai", "rampak", "rampas", "rampat", "ramping", "rampok", "rampung", "ramus", "ranah", "ranai", "ranap", "ranca", "rancak", "rancang", "rancap", "rancau", "rancu", "randa", "randai", "randat", "randau", "randek", "randu", "randung", "rangak", "rangga", "ranggah", "ranggak", "ranggam", "ranggas", "ranggi", "ranggung", "rangka", "rangkai", "rangkak", "rangkam", "rangkang", "rangkap", "rangkas", "rangket", "rangkuh", "rangkul", "rangkum", "rangkung", "rangkup", "rangrang", "rangsang", "rangum", "ranjang", "ranjau", "ranji", "ranju", "ransel", "ransum", "rantai", "rantam", "rantau", "rante", "ranti", "ranting", "rantu", "rantus", "ranyah", "ranyah", "ranyau", "ranyun", "ranyut", "rapat", "rapih", "rapik", "rapor", "rapuh", "rapun", "rapus", "rarai", "rarak", "raras", "rasai", "rasam", "rasamala", "rasan", "rasanya", "rasian", "rasional", "rasisme", "rasul", "rasulullah", "rasut", "ratah", "ratap", "ratas", "ratih", "ratna", "ratus", "rauh", "raum", "raung", "raup", "raut", "rawah", "rawan", "rawat", "rawit", "rawon", "rayah", "rayan", "rayang", "rayap", "razia", "reaktif", "realis", "realita", "rebah", "rebak", "reban", "rebana", "rebas", "rebat", "rebeh", "rebehal", "rebek", "rebet", "rebok", "rebon", "rebus", "rebut", "recah", "recak", "recap", "receh", "recik", "recok", "redah", "redam", "redap", "redas", "redih", "redik", "redoks", "reduksi", "redup", "redusir", "referensi", "refleks", "reformasi", "regan", "regang", "regas", "regat", "regel", "reguk", "regung", "regup", "rehabilitasi", "rehat", "rejah", "rejam", "rejan", "rejasa", "rejeki", "rejeng", "rejuk", "rekah", "rekam", "rekan", "rekap", "rekat", "rekayasa", "reklame", "rekor", "rekreasi", "rekrut", "relai", "relaks", "relasi", "relatif", "relung", "remah", "remai", "remaja", "remak", "remang", "remas", "remat", "rembah", "rembak", "rembang", "rembat", "rembet", "rembih", "rembuk", "rembulan", "rembut", "remeh", "remet", "remik", "remis", "rempa", "rempah", "rempak", "rempang", "rempat", "remuk", "remun", "renang", "renca", "rencak", "rencana", "rencang", "renceh", "rencek", "rencet", "rendah", "rendam", "rendang", "rendeng", "renek", "renem", "rengan", "rengat", "renggang", "renggut", "rengit", "rengka", "rengkah", "rengkam", "rengkang", "rengkap", "rengkat", "rengket", "rengkoh", "rengkol", "rengkong", "rengkudah", "rengkuh", "rengkul", "rengkung", "rengkup", "rengreng", "rengus", "rengut", "renik", "renjana", "renjong", "renon", "renovasi", "rentak", "rentan", "rentang", "rentap", "rentas", "renteng", "renten", "renten", "renti", "renung", "renyah", "renyai", "renyak", "renyam", "renyat", "renyau", "renyeh", "renyem", "renyut", "reot", "repah", "repak", "repas", "repat", "repeh", "repek", "repet", "repis", "repot", "repuh", "repui", "reputasi", "rerak", "reres", "resah", "resak", "resam", "resan", "resap", "resat", "resensi", "resep", "resepsi", "reserse", "resesi", "resiko", "resimen", "resital", "resmi", "resolusi", "respons", "restoran", "restu", "resume", "retak", "retal", "retas", "reteh", "retensi", "retet", "retih", "retis", "retok", "retorika", "retret", "retribusi", "retur", "reuni", "rewak", "rewang", "rewel", "rezeki", "rezim", "riah", "riak", "riam", "rian", "riang", "riap", "ribat", "ribu", "ribut", "rican", "ricau", "ricih", "rician", "ricik", "ricis", "ricuh", "ridan", "ridat", "ridip", "rihal", "rihat", "rijal", "rijang", "rijit", "rikuh", "riles", "rilis", "rimah", "rimar", "rimbas", "rimbat", "rimbau", "rimba", "rimbun", "rimis", "rimpang", "rimpas", "rimpi", "rimpis", "rimpuh", "rimpung", "rinai", "rincah", "rincau", "rinci", "rincis", "rindu", "ringan", "ringgit", "ringih", "ringik", "ringis", "ringkai", "ringkas", "ringkik", "ringking", "ringkuk", "ringkus", "rintang", "rintas", "rintih", "rintik", "rintis", "ripak", "ripuh", "ririk", "riris", "risalah", "risalat", "risau", "riset", "risiko", "risit", "riskan", "ritel", "ritme", "ritual", "riuk", "riung", "rival", "riwan", "riwayat", "robak", "robat", "robek", "roboh", "robok", "robot", "ronah", "ronce", "ronda", "rondo", "roneo", "rongga", "ronggang", "ronggeng", "ronggok", "rongkong", "rongsok", "ronta", "rontok", "rontgen", "rupiah", "ruruh", "rurup", "rusuh", "rusuk", "rutin", "ruyung", "sabak", "sabana", "sabang", "sabar", "sabas", "sabda", "sabel", "saben", "sabet", "sabil", "sabit", "sablon", "sabotase", "sabuk", "sabun", "sabur", "sabut", "sadah", "sadai", "sadak", "sadang", "sadap", "sadar", "sadau", "sadel", "sadik", "sadur", "safari", "safinah", "safir", "sagai", "sagang", "sagar", "saguer", "sagun", "sahabat", "sahada", "sahaja", "saham", "sahan", "sahap", "sahara", "sahaya", "sahid", "sahifa", "sahih", "sahir", "sahur", "sahut", "sailo", "saing", "sains", "sajadah", "sajak", "sajang", "sajen", "sakal", "sakar", "sakarat", "sakat", "sakelar", "sakhalat", "sakhawat", "sakhi", "sakit", "saklar", "sakral", "sakramen", "sakratul", "saksi", "sakti", "salaf", "salah", "salai", "salak", "salam", "salang", "salap", "salar", "salat", "saldo", "saleh", "salem", "salep", "salib", "salih", "salim", "salin", "saling", "salip", "salir", "salju", "salon", "salur", "salut", "samad", "samak", "saman", "samar", "samara", "samas", "sambal", "samban", "sambar", "sambat", "sambau", "samben", "sambet", "sambil", "sambit", "sambut", "sampah", "sampai", "sampak", "sampan", "sampar", "sampas", "sampat", "samper", "sampir", "sampit", "sampo", "sampul", "samudra", "samum", "samun", "sanak", "sanat", "sanatorium", "sandang", "sandar", "sandat", "sandera", "sandikala", "sandiwara", "sandung", "sanga", "sangar", "sangat", "sangga", "sanggah", "sanggam", "sanggan", "sanggat", "sangger", "sanggi", "sanggit", "sanggul", "sanggum", "sanggung", "sangkah", "sangkak", "sangkal", "sangkan", "sangkar", "sangkat", "sangkut", "sangkur", "sangli", "sanglu", "sangon", "sangsang", "sangsi", "saniter", "sanjung", "sanksi", "santai", "santak", "santan", "santap", "santase", "santer", "santir", "santri", "santun", "sapah", "sapai", "sapak", "sapan", "sapar", "sapat", "sapau", "sapeh", "sapek", "saper", "sapir", "sapit", "saput", "saraf", "sarak", "saran", "sarang", "sarap", "sarat", "sarau", "sareh", "saren", "saret", "sargut", "sarikan", "sarip", "sarira", "sarit", "sarjana", "sarju", "sarka", "sarkasme", "sarkofagus", "saron", "sars", "sartan", "sarti", "sartu", "saruk", "sarung", "sarut", "sarwa", "sasak", "sasal", "sasan", "sasana", "sasap", "sasar", "sasat", "sasi", "sastra", "sasul", "satai", "satak", "satar", "satelit", "satin", "satir", "satru", "satuan", "satwa", "saudagar", "saudara", "saudari", "sauk", "saum", "saun", "saung", "saur", "sawah", "sawal", "sawan", "sawang", "sawat", "sawer", "sawit", "sawut", "sayab", "sayad", "sayak", "sayang", "sayap", "sayat", "sayet", "sayid", "sayur", "sebab", "sebah", "sebai", "sebak", "sebal", "seban", "sebar", "sebat", "sebau", "sebayang", "sebek", "sebeng", "seberang", "sebet", "sebih", "sebit", "sebuk", "sebung", "sebut", "sebuya", "sedah", "sedak", "sedam", "sedan", "sedang", "sedap", "sedar", "sedari", "sedat", "sedekah", "sedelinggam", "sedeng", "sederhana", "sedia", "sedikit", "sedimen", "sedot", "seduh", "segah", "segak", "segal", "segan", "segar", "segara", "segat", "segel", "segenap", "segera", "segmen", "segol", "sehat", "sejahtera", "sejarah", "sejuk", "sekali", "sekarang", "sekolah", "sekretaris", "sektor", "selalu", "selam", "selamat", "selang", "selaras", "selat", "selatan", "selebriti", "seleksi", "selesai", "selisih", "selokan", "seluas", "seluh", "seluk", "selum", "selup", "selur", "selut", "semangat", "semangka", "sembah", "sembahyang", "sembarangan", "sembilan", "sembuh", "sembunyi", "semen", "sementar", "semesta", "seminar", "sempat", "sempit", "semproti", "semua", "semut", "senang", "senapan", "senar", "senda", "sendawa", "sendiri", "sendok", "sengaja", "sengat", "sengit", "seniman", "senjata", "sentak", "senter", "sentimen", "sentuh", "senyum", "sepak", "sepatu", "sepeda", "sepele", "sepiring", "sepuluh", "sepur", "seragam", "serai", "serak", "seram", "serambi", "serang", "serap", "serat", "serayu", "serba", "serbet", "serbu", "serbuk", "serdadu", "sereal", "seret", "serikat", "sering", "serius", "seronok", "serta", "sertifikat", "seruling", "serum", "sesah", "sesak", "sesal", "sesama", "sesar", "sesat", "sesudah", "sesumbar", "setang", "setara", "stasiun", "status", "stempel", "setia", "setuju", "siamang", "siang", "siapa", "siasat", "sibuk", "sidak", "sidang", "sidik", "sifat", "sigap", "sihir", "sikap", "sikat", "siklus", "siksa", "silakan", "silang", "silap", "silat", "silau", "silih", "siluet", "siluman", "simak", "simbah", "simbol", "simetri", "simpang", "simpati", "simpan", "simpel", "simpuh", "simpul", "sinar", "sindikat", "sindir", "sinergi", "singgah", "singkap", "singkat", "singkir", "singkur", "sinis", "sinkron", "sintesis", "sipil", "sipir", "siput", "siram", "sirat", "sirine", "sirip", "sirkuit", "sirkulasi", "sirna", "sirsak", "sisik", "sisip", "sisir", "sistem", "siswa", "situasi", "siung", "siur", "skala", "skandal", "skenario", "sketsa", "skripsi", "sogok", "soket", "solat", "solek", "solidaritas", "solusi", "sombong", "sopan", "sopir", "sorak", "sorot", "sosial", "sosis", "sosok", "spanduk", "spesial", "spesifik", "spion", "sponsor", "sprint", "stadion", "standar", "statistik", "status", "stasiun", "steril", "stiker", "struktur", "studi", "studio", "suaka", "suami", "suara", "suasana", "suatu", "subjek", "subsidi", "substansi", "subuh", "subur", "sudah", "sudut", "sugih", "suguh", "sujud", "sukar", "sukarela", "sukses", "sukur", "sulam", "sulap", "suling", "sulit", "sultan", "suluh", "sulung", "sulur", "sumatera", "sumbang", "sumbat", "sumber", "sumbing", "sumbu", "sumpah", "sumpek", "sumpit", "sumsum", "sumur", "sunat", "sungai", "sungging", "sungguh", "sungkem", "sungkur", "sungut", "sunting", "suntuk", "suntuk", "sunyi", "supaya", "super", "supir", "surah", "surai", "suram", "surat", "surau", "sutan", "suuzon", "swafoto", "swalayan", "swasta", "syafaat", "syahadat", "syair", "syaman", "syamsi", "syamsir", "syara", "syaraf", "syarat", "syari", "syariat", "syarif", "syarifah", "syarik", "syarikat", "syatar", "syatibi", "syawal", "syekh", "syirik", "syiwa", "syukur", "taat", "tabah", "tabak", "tabal", "taban", "tabar", "tabet", "tabiat", "tabib", "tabik", "tabir", "tabloid", "tabrak", "tabuh", "tabun", "tabung", "tabur", "tabut", "tadah", "tadar", "tadarus", "tadung", "tafakur", "tafsir", "tagak", "tagal", "tagan", "tagar", "tageh", "tagih", "tagut", "tahadi", "tahak", "tahan", "tahang", "tahap", "tahar", "tahat", "tahayul", "tahiat", "tahil", "tahir", "tahis", "tahit", "tahun", "taici", "taifun", "taiko", "takabur", "takad", "takah", "takak", "takal", "takan", "takar", "takat", "takbir", "takdir", "takel", "takhta", "takik", "takir", "takis", "takjub", "takkan", "taklim", "takluk", "takma", "takraw", "takrif", "takrim", "taksa", "taksir", "taksis", "taktik", "taktis", "takuh", "takuk", "takun", "takut", "takwa", "takwil", "takzim", "talah", "talai", "talak", "talam", "talan", "talang", "talar", "talas", "talat", "talau", "talen", "talent", "talenta", "talib", "talis", "talkun", "talun", "talur", "tamadun", "tamah", "tamak", "tamam", "tamar", "tamasya", "tamat", "tambah", "tambak", "tambal", "tamban", "tambang", "tambar", "tambat", "tambat", "tambi", "tambo", "tambul", "tambun", "tambung", "tambur", "tamat", "tameng", "tamis", "tampah", "tampak", "tampan", "tampar", "tampas", "tampeh", "tampel", "tampi", "tampik", "tampil", "tampin", "tampir", "tampis", "tampok", "tampung", "tamsil", "tamuk", "tamun", "tanai", "tanak", "tanam", "tanat", "tanau", "tandak", "tandan", "tandang", "tandas", "tandat", "tandem", "tandes", "tanduk", "tandun", "tandung", "tandur", "tangah", "tangal", "tangap", "tangar", "tangas", "tangat", "tangga", "tanggah", "tanggal", "tanggap", "tanggar", "tanggas", "tanggi", "tanggul", "tanggum", "tanggung", "tangis", "tangkah", "tangkai", "tangkal", "tangkan", "tangkap", "tangkar", "tangkas", "tangkat", "tangke", "tangkil", "tangkis", "tangkit", "tangku", "tangkue", "tangkul", "tangkup", "tangkur", "tangkut", "tangon", "tangsa", "tangsi", "tania", "tanis", "tanjak", "tanjal", "tanjan", "tanjar", "tanju", "tanjung", "tanjur", "tansi", "tantang", "tanti", "tantu", "tanur", "tapa", "tapah", "tapai", "tapak", "tapan", "tapar", "tapas", "tapau", "tapel", "tapek", "taper", "tapih", "tapik", "tapir", "tapis", "tapit", "tapuk", "tapung", "tapur", "tapus", "taraf", "tarah", "tarai", "tarak", "taram", "taran", "tarang", "tarap", "taras", "tarat", "tarau", "tarekat", "tarek", "tarid", "tarikh", "taring", "taris", "target", "tariu", "tarka", "tarkas", "taruh", "taruk", "tarum", "taruna", "tarung", "tarup", "tarus", "tasah", "tasak", "tasamuh", "tasan", "tasbih", "tasdik", "tasik", "taslim", "tasmak", "tasmik", "tasrif", "tastas", "tatah", "tatai", "tatak", "tatal", "tatam", "tatami", "tatan", "tatang", "tatap", "tatar", "tatih", "tatit", "tatkala", "taufan", "taufik", "tauge", "tauhid", "tauke", "tauladan", "taulan", "taulany", "taum", "taurat", "tawaduk", "tawah", "tawai", "tawak", "tawakal", "tawan", "tawang", "tawas", "tawat", "tayang", "tayar", "tayum", "tayun", "teater", "tebah", "tebak", "tebal", "teban", "tebang", "tebar", "tebas", "tebat", "tebeh", "tebel", "teber", "tebet", "tebih", "tebis", "tebit", "tebok", "tebon", "tebus", "teces", "tedas", "tedeng", "teduh", "tegak", "tegal", "tegang", "tegap", "tegar", "teguh", "teguk", "tegur", "tekad", "tekah", "tekak", "tekap", "tekar", "tekat", "tekek", "tekel", "teken", "teker", "tekis", "teklek", "teknik", "teknis", "teknologi", "tekoh", "tekor", "tekos", "tekte", "tektite", "tekua", "tekuk", "tekul", "tekun", "tekup", "tekur", "telah", "teladan", "telaga", "telah", "telai", "telak", "telan", "telang", "telanjang", "telanjur", "telantar", "telap", "telapak", "telat", "telaten", "telau", "teledek", "telegram", "telepon", "teleskop", "telinga", "teliti", "telor", "teluk", "telungkup", "telus", "telusur", "temah", "temali", "temarang", "temaram", "temasa", "tematik", "tembak", "tembakau", "tembakul", "tembam", "tembang", "tembar", "tembas", "tembeh", "tembel", "temberang", "tembikai", "tembilang", "tembolok", "tembung", "tembuni", "tembus", "temeh", "temen", "temet", "temon", "tempah", "tempai", "tempak", "tempala", "tempan", "tempang", "tempar", "tempas", "tempat", "tempayan", "tempel", "tempeleng", "temperamen", "temperatur", "tempik", "tempil", "tempinis", "tempoyak", "tempua", "tempuh", "tempun", "tempur", "tempurung", "temui", "temuku", "temun", "temut", "tenaga", "tenang", "tendang", "tendas", "tender", "tengak", "tengal", "tengar", "tengat", "tenggak", "tenggang", "tenggara", "tenggek", "tenggelam", "tengger", "tenggiling", "tenggorok", "tengkar", "tengking", "tengku", "tengkuk", "tengkurap", "tengkurup", "tengu", "tenjet", "tensi", "tenun", "tenung", "teologi", "tepah", "tepak", "tepan", "tepas", "tepeh", "tepek", "teper", "tepis", "tepok", "tepuk", "tepung", "tepus", "terah", "terai", "terajang", "terak", "teran", "terang", "terap", "terasi", "terat", "teratai", "terau", "terawang", "terberak", "terbit", "terbus", "tercecer", "terdedah", "terdepan", "terdidik", "terendam", "terentang", "teriak", "teriga", "terima", "terjang", "terjun", "terkam", "terkap", "terkait", "terlanjur", "terlantar", "terminal", "ternak", "terobos", "terompah", "terompet", "teropong", "terowongan", "terperanjat", "tertawa", "tertentu", "teruna", "tetapi", "tetas", "teter", "tetes", "tetua", "tewas", "tiada", "tiarap", "tidak", "tikam", "tikar", "tiket", "tikis", "tikit", "tikus", "tilam", "tilan", "tilap", "tilas", "tilawat", "tilik", "timah", "timang", "timbal", "timbang", "timbau", "timbi", "timbil", "timbun", "timbul", "timbur", "timit", "timpa", "timpal", "timpang", "timpas", "timpi", "timpus", "timun", "timus", "tindak", "tindas", "tindih", "tindis", "tinggal", "tinggung", "tingkah", "tingkal", "tingkap", "tingkat", "tingkepi", "tingkil", "tingkir", "tingkis", "tingkuh", "tinjau", "tinju", "tionghoa", "tipak", "tipar", "tipas", "tipes", "tipis", "tipus", "tirah", "tiram", "tiran", "tiras", "tirat", "tiris", "tirus", "tisak", "tisik", "tisin", "tistis", "titah", "titik", "titip", "titir", "titis", "titit", "titrat", "tituler", "tiung", "tiwul", "tobak", "tobat", "tobel", "toblos", "todong", "togog", "tohor", "tojok", "tokak", "tokek", "tokok", "tokong", "tokop", "tolak", "tolan", "tolap", "toleh", "toleransi", "tolok", "tolol", "tolong", "tomat", "tombak", "tombol", "tombong", "tomong", "tompel", "tonggak", "tongkang", "tongkat", "tongkol", "tongkrong", "tongon", "tongos", "tonton", "topan", "topang", "topdal", "topek", "topeng", "topik", "topografi", "toponimi", "toples", "topong", "toraks", "toreh", "torek", "torkhas", "tornado", "torpedo", "totalitas", "totok", "totol", "towak", "tualang", "tuang", "tuanku", "tuban", "tuberkulosis", "tubruk", "tubuh", "tuding", "tuduh", "tudung", "tugas", "Tuhan", "tuhur", "tujuan", "tujuh", "tukak", "tukal", "tukam", "tukang", "tukar", "tukas", "tukat", "tukik", "tukil", "tukul", "tukung", "tukup", "tulah", "tualang", "tualas", "tualat", "tulen", "tulis", "tulus", "tuman", "tumang", "tumbak", "tumbal", "tumbang", "tumbas", "tumbuh", "tumbuk", "tumis", "tumit", "tumor", "tumpah", "tumpak", "tumpang", "tumpas", "tumpat", "tumpeng", "tumpes", "tumpil", "tumpu", "tumpuk", "tumpul", "tumpur", "tunai", "tunak", "tunam", "tunas", "tunda", "tundang", "tunduk", "tundun", "tungau", "tunggal", "tunggang", "tungging", "tunggit", "tunggul", "tungkai", "tungkak", "tungkap", "tungku", "tungkul", "tungkup", "tungkus", "tunjang", "tunjuk", "tunjung", "tuntas", "tuntun", "tuntut", "tupai", "turap", "turas", "turis", "turisme", "turnamen", "turne", "turun", "turus", "turut", "tustel", "tusuk", "tustel", "tuton", "tutuh", "tutuk", "tutul", "tutup", "tutur", "uang", "ubah", "uban", "ubat", "ubel", "ubet", "ubin", "ubit", "ubrak", "ubun", "ubur", "ucap", "ucek", "ucer", "ucil", "ucung", "udang", "udara", "udat", "udek", "udel", "udet", "udik", "uduk", "udur", "udut", "ugahari", "uget", "ugut", "ujana", "ujud", "ujian", "ujung", "ukas", "ukik", "ukir", "ukrit", "ukur", "ulah", "ulai", "ulak", "ulam", "ulan", "ulang", "ulap", "ular", "ulas", "ulat", "ulekan", "ulem", "uler", "ulet", "ulit", "ulung", "ulup", "ulur", "umat", "umbai", "umbak", "umban", "umbar", "umbat", "umbi", "umbuk", "umbul", "umbun", "umbut", "umpan", "umpat", "umpet", "umpil", "umpuk", "umpun", "umum", "umur", "umut", "unak", " unam", "unan", "unar", "uncang", "uncat", "unce", "uncui", "undak", "undan", "undang", "undas", "undat", "undel", "unduh", "unduk", "undul", "undur", "unggak", "unggal", "unggang", "unggat", "unggul", "unggun", "unggut", "ungkah", "ungkap", "ungkil", "ungkir", "ungkit", "unglai", "ungum", "ungut", "unifurm", "unik", "universitas", "universal", "unjuk", "unjung", "unjun", "unjut", "unok", "unsang", "unsur", "untai", "untal", "untang", "untar", "untas", "untel", "untit", "untung", "untuk", "untun", "untut", "upacara", "upah", "upak", "upam", "upan", "upar", "upas", "upat", "upaya", "upet", "upeti", "upih", "upik", "upir", "upis", "upit", "upok", "urai", "urak", "uram", "uran", "urang", "urap", "uras", "urat", "urau", "uray", "urdu", "ureum", "urgen", "urian", "urik", "uril", "urim", "urin", "uris", "urit", "urung", "urup", "urus", "urut", "uruy", "usah", "usaha", "usak", "usam", "usang", "usap", "usat", "usia", "usik", "usil", "usir", "uskup", "usul", "usung", "usus", "usut", "utama", "utara", "utas", "utih", "utik", "utuh", "utus", "uvula", "uzlah", "uzur", "vaksin", "vakum", "valensi", "valid", "valuta", "vampir", "vanili", "variasi", "varietas", "vaskular", "velbet", "velg", "vena", "ventilasi", "venus", "verbal", "verifikasi", "vermak", "versi", "vertek", "vertikal", "veta", "veteran", "veto", "vetsin", "video", "vinil", "viola", "virus", "virtual", "visual", "vitamin", "vokal", "vokasi", "volume", "vonis", "votum", "vulgar", "vulkanis", "waadat", "wabah", "wacana", "wadah", "wadak", "wadal", "wadam", "wadang", "wadas", "wadat", "waduk", "wadung", "wafat", "wahah", "wahai", "waham", "wahana", "wahyu", "waisya", "wait", "wajah", "wajan", "wajar", "wajib", "wajik", "wakaf", "wakil", "waktu", "wakun", "walad", "walafiat", "walaka", "walang", "walau", "walawafiat", "walet", "walimahan", "walimatul", "walisongo", "walkie", "wallahu", "waluh", "wanda", "wangi", "wangun", "wanita", "wanodya", "wanter", "waqaf", "wara", "warak", "warangan", "waras", "warga", "waria", "warid", "waris", "warisan", "warkat", "warna", "warnasari", "warok", "warsa", "warta", "wartawan", "wartel", "warung", "wasak", "wasalam", "wasangka", "wasiat", "wasil", "wasilah", "wasit", "waslap", "waspada", "waswas", "watak", "watan", "watas", "wates", "watun", "wawancara", "wawas", "wawasan", "wayang", "wayuh", "wedana", "wedang", "wedar", "wedel", "weduk", "weher", "wejang", "wekas", "wekel", "weker", "welang", "welas", "welat", "welit", "wenang", "wenas", "wendi", "wengku", "wenter", "werda", "werdi", "werit", "werkudara", "werst", "wortel", "wreda", "wredatama", "wudu", "wujud", "wukuf", "wulang", "wulung", "wungu", "wutuh", "xenia", "xenofobia", "xilofon", "yaani", "yabai", "yabani", "yadi", "yahud", "yahudi", "yahum", "yaitu", "yakin", "yakit", "yakni", "yaksa", "yakub", "yakun", "yakut", "yakuza", "yaman", "yamani", "yantra", "yapa", "yapi", "yarad", "yara", "yasan", "yasin", "yasti", "yatim", "yaumul", "yayasan", "yayi", "yayu", "yoga", "yogi", "yogya", "yohimbine", "yojana", "yoker", "yolat", "yoyo", "yuda", "yudikatif", "yudo", "yudisial", "yudisium", "yuget", "yugo", "yunda", "yunani", "yunior", "yunta", "yuran", "yure", "yuridis", "yuris", "yurisprudensi", "yuta", "zabad", "zabah", "zabaniah", "zabarjad", "zabib", "zabit", "zabur", "zadah", "zahid", "zahir", "zaitun", "zakat", "zakar", "zakir", "zakum", "zalim", "zalir", "zaman", "zambak", "zamrud", "zamzam", "zanda", "zanggi", "zani", "zapin", "zarah", "zauj", "zaujah", "zayun", "zebra", "zebu", "zenith", "ziarah", "zig-zag", "zikir", "zillullah", "zina", "zindik", "zink", "zionisme", "zirah", "zirkon", "zodiak", "zonasi", "zonk", "zoologi", "zorbing", "zuama", "zuhad", "zuhud", "zuhur", "zulham", "zulhijah", "zulkaidah", "zulmat", "zulu", "zurat", "zuriah"
+    "ayam", "anjing", "api", "bakso", "balon", "cacing", "cicak", "dadu", "diam", 
+    "emas", "elang", "film", "foto", "gajah", "gitar", "hari", "hujan", "ikan", 
+    "itik", "jam", "jeruk", "kucing", "kenapa", "kapan", "dimana", "lampu", "makan", 
+    "minum", "nasi", "nenek", "obat", "orang", "padi", "pintu", "rumah", "rusa", 
+    "sapi", "satu", "tahu", "telur", "ular", "uang", "viva", "vitamin", "waktu", 
+    "wortel", "xilem", "xerox", "yoyo", "yakin", "zebra", "zakat", "kultur", "vokal"
 }
 
--- State & Stats
+-- Internals
 local usedWords = {}
+local IndexedDB = {}
+local targetUIPath = "" -- Diset via UI manual atau auto-scan
 local autoTypeEnabled = false
 local trapMode = true
-local typeOnlyContinuation = false
-local typingSpeedMin = 0.05
-local typingSpeedMax = 0.15
-local difficultEndings = {"x", "v", "z", "j"}
-local currentPrefix = "None"
-local lastWordPlayed = "None"
+local lastDetectedPrompt = ""
 
--- Indexing for Speed
-local IndexedDB = {}
-local totalWordCount = #myWords
-
+-- Pengelompokan kata (A-Z)
 local function rebuildIndex()
     IndexedDB = {}
     for _, word in ipairs(myWords) do
@@ -40,154 +42,134 @@ rebuildIndex()
 
 -- UI Setup
 local Window = Rayfield:CreateWindow({
-    Name = "Delta Script AI | Sambung Kata Pro",
-    LoadingTitle = "Ultimate Word Chain Bot",
-    LoadingSubtitle = "by Delta Developer",
-    ConfigurationSaving = { Enabled = false }
+    Name = "DELTA | Sambung Kata REAL",
+    LoadingTitle = "Menghubungkan Engine...",
+    LoadingSubtitle = "Delta Executor Optimized",
 })
 
-local HomeTab = Window:CreateTab("Dashboard", 4483362458)
-local AutoTab = Window:CreateTab("Automation", 4483362458)
-local DBTab = Window:CreateTab("Database", 4483362458)
+local MainTab = Window:CreateTab("Utama", 4483362458)
+local StatsTab = Window:CreateTab("Statistik", 4483362458)
 
--- [DASHBOARD SECTION]
-local TotalLabel = HomeTab:CreateLabel("Total Words in DB: " .. totalWordCount)
-local UsedLabel = HomeTab:CreateLabel("Words Used: 0")
-local PrefixLabel = HomeTab:CreateLabel("Detected Prefix: None")
-local LastWordLabel = HomeTab:CreateLabel("Last Word: None")
+-- Stat Labels
+local StatusLabel = StatsTab:CreateLabel("Status: Menunggu...")
+local PromptLabel = StatsTab:CreateLabel("Prefix Terdeteksi: None")
+local LastWordLabel = StatsTab:CreateLabel("Kata Terakhir: None")
+local dbCountLabel = StatsTab:CreateLabel("Total Database: " .. #myWords .. " Kata")
 
-local function updateStatsUI()
-    local countUsed = 0
-    for _ in pairs(usedWords) do countUsed = countUsed + 1 end
-    UsedLabel:Set("Words Used: " .. countUsed)
-    PrefixLabel:Set("Detected Prefix: " .. currentPrefix)
-    LastWordLabel:Set("Last Word: " .. lastWordPlayed)
+-- Pencarian Kata Terbaik
+local function findWord(prefix)
+    prefix = prefix:lower():match("%w+") -- Bersihkan teks dari simbol
+    if not prefix then return nil end
+    
+    local firstLetter = string.sub(prefix, 1, 1)
+    local candidates = IndexedDB[firstLetter] or {}
+    
+    local normalOnes = {}
+    local trapOnes = {}
+
+    for _, word in ipairs(candidates) do
+        -- Syarat: Harus diawali prefix, belum dipakai, dan panjang > panjang prefix
+        if string.find(word, "^" .. prefix) and not usedWords[word] and #word > #prefix then
+            local lastChar = string.sub(word, -1)
+            if lastChar == "x" or lastChar == "v" or lastChar == "z" or lastChar == "j" then
+                table.insert(trapOnes, word)
+            else
+                table.insert(normalOnes, word)
+            end
+        end
+    end
+
+    if trapMode and #trapOnes > 0 then
+        return trapOnes[math.random(1, #trapOnes)]
+    elseif #normalOnes > 0 then
+        return normalOnes[math.random(1, #normalOnes)]
+    end
+    return nil
 end
 
--- [AUTOMATION SECTION]
-AutoTab:CreateToggle({
-    Name = "Auto-Typing Master",
+-- Simulasi Mengetik REAL (Bukan sekedar ganti teks)
+local function realType(word)
+    StatusLabel:Set("Status: Mengetik " .. word:upper())
+    -- Klik TextBox agar fokus (Opsional, beberapa game butuh ini)
+    -- VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0) 
+
+    for i = 1, #word do
+        local char = string.sub(word, i, i)
+        VirtualInputManager:SendKeyEvent(true, char:upper(), false, game)
+        task.wait(0.05) -- Kecepatan ketik (0.05 = Cepat)
+        VirtualInputManager:SendKeyEvent(false, char:upper(), false, game)
+    end
+    
+    task.wait(0.1)
+    VirtualInputManager:SendKeyEvent(true, "Return", false, game) -- Tekan Enter
+    VirtualInputManager:SendKeyEvent(false, "Return", false, game)
+    
+    usedWords[word] = true
+    LastWordLabel:Set("Kata Terakhir: " .. word:upper())
+    StatusLabel:Set("Status: Selesai Mengetik")
+end
+
+-- UI Controls
+MainTab:CreateToggle({
+    Name = "Aktifkan Auto-Typing",
     CurrentValue = false,
     Callback = function(Value) autoTypeEnabled = Value end,
 })
 
-AutoTab:CreateToggle({
-    Name = "Trap Opponent (Ends with X/V/Z)",
+MainTab:CreateToggle({
+    Name = "Mode Jebakan (Trap)",
     CurrentValue = true,
     Callback = function(Value) trapMode = Value end,
 })
 
-AutoTab:CreateToggle({
-    Name = "Continuation Only (Smart Mode)",
-    CurrentValue = false,
-    Callback = function(Value) typeOnlyContinuation = Value end,
-})
-
-AutoTab:CreateSlider({
-    Name = "Min Typing Delay",
-    Range = {0, 0.5},
-    Increment = 0.01,
-    Suffix = "sec",
-    CurrentValue = 0.05,
-    Callback = function(Value) typingSpeedMin = Value end,
-})
-
-AutoTab:CreateSlider({
-    Name = "Max Typing Delay",
-    Range = {0.1, 1},
-    Increment = 0.01,
-    Suffix = "sec",
-    CurrentValue = 0.15,
-    Callback = function(Value) typingSpeedMax = Value end,
-})
-
--- [DATABASE SECTION]
-DBTab:CreateInput({
-    Name = "Search Word",
-    PlaceholderText = "Type word...",
-    RemoveTextAfterFocusLost = false,
+MainTab:CreateInput({
+    Name = "Nama UI Label Kata",
+    PlaceholderText = "Contoh: WordLabel / PromptText",
     Callback = function(Text)
-        local found = false
-        for _, w in ipairs(myWords) do
-            if w:lower() == Text:lower() then found = true break end
-        end
-        Rayfield:Notify({
-            Title = "Database Search",
-            Content = found and "Word EXISTS in database!" or "Word NOT FOUND.",
-            Duration = 3
-        })
+        targetUIPath = Text
+        Rayfield:Notify({Title = "Target Diset", Content = "Mencari UI dengan nama: " .. Text})
     end,
 })
 
-DBTab:CreateButton({
-    Name = "Reset Used History",
+MainTab:CreateButton({
+    Name = "Reset History (Gunakan Tiap Ronde)",
     Callback = function() 
         usedWords = {} 
-        lastWordPlayed = "None"
-        updateStatsUI()
-        Rayfield:Notify({Title = "Success", Content = "History Cleared!", Duration = 2})
+        Rayfield:Notify({Title = "Reset", Content = "History kata dikosongkan!"})
     end,
 })
 
--- CORE LOGIC
-local function findBestWord(prefix)
-    prefix = string.lower(prefix)
-    currentPrefix = prefix
-    local firstLetter = string.sub(prefix, 1, 1)
-    local candidates = IndexedDB[firstLetter] or {}
-    
-    local normalList = {}
-    local trapList = {}
-
-    for _, word in ipairs(candidates) do
-        if string.find(word, "^" .. prefix) and not usedWords[word] then
-            local isTrap = false
-            for _, char in ipairs(difficultEndings) do
-                if string.sub(word, -1) == char then isTrap = true break end
-            end
-            if isTrap then table.insert(trapList, word) else table.insert(normalList, word) end
-        end
-    end
-
-    local finalWord = (trapMode and #trapList > 0) and trapList[math.random(1, #trapList)] or normalList[math.random(1, #normalList)]
-    return finalWord
-end
-
-local function typeWord(word, prefix)
-    local text = word
-    if typeOnlyContinuation then text = string.gsub(word, "^" .. prefix, "", 1) end
-
-    for i = 1, #text do
-        local char = string.sub(text, i, i)
-        VirtualInputManager:SendKeyEvent(true, char:upper(), false, game)
-        task.wait(math.random(typingSpeedMin * 100, typingSpeedMax * 100) / 100)
-        VirtualInputManager:SendKeyEvent(false, char:upper(), false, game)
-    end
-    
-    task.wait(0.2)
-    VirtualInputManager:SendKeyEvent(true, "Return", false, game)
-    VirtualInputManager:SendKeyEvent(false, "Return", false, game)
-    
-    usedWords[word] = true
-    lastWordPlayed = word
-    updateStatsUI()
-end
-
--- Main Loop (Mencari perubahan pada game UI)
+-- ENGINE: Loop untuk mendeteksi perubahan teks di game
 task.spawn(function()
-    while task.wait(0.5) do
+    while task.wait(0.2) do
         if autoTypeEnabled then
-            -- CONTOH: Sesuaikan path ini dengan game target Anda!
-            -- Misal: game.Players.LocalPlayer.PlayerGui.Main.GameFrame.TargetText
-            local promptLabel = nil -- PASTE PATH UI DISINI (Gunakan Dex Explorer)
-            
-            if promptLabel and promptLabel.Text ~= "" then
-                local prompt = promptLabel.Text:match("%w+")
-                if prompt and prompt ~= "" then
-                    local word = findBestWord(prompt)
-                    if word then
-                        typeWord(word, prompt)
-                        task.wait(2)
+            -- CARA KERJA: Mencari seluruh UI di layar yang punya nama sesuai targetUIPath
+            local foundLabel = nil
+            for _, v in pairs(LocalPlayer.PlayerGui:GetDescendants()) do
+                if v:IsA("TextLabel") or v:IsA("TextBox") then
+                    -- Jika user mengisi nama UI, cari spesifik. Jika tidak, coba scan teks pendek.
+                    if targetUIPath ~= "" and v.Name == targetUIPath then
+                        foundLabel = v
+                        break
+                    elseif targetUIPath == "" and #v.Text > 0 and #v.Text <= 3 and v.Visible then
+                        -- Auto-detect: Cari label yang teksnya pendek (1-3 huruf) biasanya itu prefix
+                        foundLabel = v
+                    end
+                end
+            end
+
+            if foundLabel and foundLabel.Text ~= lastDetectedPrompt then
+                local currentText = foundLabel.Text:gsub("%s+", "") -- Hapus spasi
+                if #currentText > 0 then
+                    lastDetectedPrompt = currentText
+                    PromptLabel:Set("Prefix Terdeteksi: " .. currentText:upper())
+                    
+                    local wordToPlay = findWord(currentText)
+                    if wordToPlay then
+                        task.wait(0.5) -- Jeda sebentar sebelum mulai ketik
+                        realType(wordToPlay)
+                    else
+                        StatusLabel:Set("Status: Kata tidak ada di DB!")
                     end
                 end
             end
